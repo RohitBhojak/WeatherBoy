@@ -35,8 +35,14 @@ function init() {
   });
 
   async function updateWeather() {
+    const loading = document.createElement("p");
+    loading.textContent = "Loading...";
     const weatherReport = document.querySelector(".weather-report");
+    weatherReport.style.display = "flex";
+    weatherReport.innerHTML = "";
+    weatherReport.append(loading);
     try {
+      const unit = document.querySelector(".active").textContent;
       const report = await getWeather();
       console.log(report);
 
@@ -45,23 +51,21 @@ function init() {
       icon.src = iconModule.default;
 
       const temp = document.createElement("p");
-      temp.textContent = `${report.temp}°`;
+      temp.textContent = `${report.temp}${unit}`;
 
       const description = document.createElement("p");
       description.textContent = report.conditions;
 
       const feelsLike = document.createElement("p");
-      feelsLike.textContent = `Feels like: ${report.feelslike}°`;
+      feelsLike.textContent = `Feels like: ${report.feelslike}${unit}`;
 
       const humidity = document.createElement("p");
       humidity.textContent = `Humidity: ${report.humidity}%`;
 
       weatherReport.innerHTML = "";
       weatherReport.append(icon, temp, description, feelsLike, humidity);
-
-      searchBar.value = "";
     } catch (error) {
-      console.log(error);
+      weatherReport.innerHTML = "Invalid Search";
     }
   }
 }
